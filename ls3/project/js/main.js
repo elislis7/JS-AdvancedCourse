@@ -7,7 +7,7 @@ let getRequest = (url, cb) => { // не fetch
         xhr.onload = () => resolve(cb(xhr.responseText));
         xhr.onerror = () => reject(xhr.statusText);
         xhr.send();
-    });
+    })
 };
 
 class ProductList {
@@ -16,8 +16,7 @@ class ProductList {
         this._goods = [];
         this._productsObjects = [];
 
-        // this._fetchGoods();
-        // this._render();
+
         this.getProducts()
             .then((data) => {
                 this._goods = data;
@@ -25,15 +24,6 @@ class ProductList {
                 console.log(this.getTotalPrice());
             });
     }
-
-    // _fetchGoods() {
-    //     getRequest(`${API}/catalogData.json`, (data) => {
-    //         // console.log(data);
-    //         this._goods = JSON.parse(data);
-    //         this._render();
-    //         console.log(this._goods);
-    //     });
-    // }
 
     getProducts() {
         return fetch(`${API}/catalogData.json`)
@@ -66,41 +56,36 @@ class ProductItem {
 
     getHTMLString() {
         return `<div class="product-item" data-id="${this.id}">
-                  <img src="${this.img}" alt="Some img">
-                  <div class="desc">
-                      <h3>${this.title}</h3>
-                      <p>${this.price} \u20bd</p>
-                      <button class="buy-btn">Купить</button>
-                  </div>
-              </div>`;
+                    <img src="${this.img}" alt="Some img">
+                    <div class="desc">
+                        <h3>${this.title}</h3>
+                        <p>${this.price} \u20bd</p>
+                        <button class="buy-btn">Купить</button>
+                    </div>
+                </div>`;
     }
 }
 
-// const cart = new Cart();
-// const list = new ProductList(cart);
 const list = new ProductList();
 
-// Внешняя функция для вызова добавления в корзину
 function addBasket(id) {
     cart.addToBasket(id);
 };
-// Внешняя функция для вызова удаления из корзины
+
 function deleteItem(id) {
     cart.deleteFromBasket(id);
 };
-// Внешняя функция для вызова рендера корзины
+
 function viewCart() {
     cart.render();
 };
 
-// Функция, которая при нажатии кнопки делает запрос по ссылке, указанной в аргументе
 function loadBut() {
     const element = e.target;
     const src = element.getAttribute('data-load');
     list.fetchGoods(src);
 }
 
-// Класс элемента корзины
 class BasketItem {
     constructor(id, title, price, img) {
         this.id = id;
@@ -118,12 +103,12 @@ class BasketItem {
     }
 }
 
-// Класс корзины
 class Basket {
-    constructor() {
-        this.cartGoods = [];
+    constructor(container = '.products') {
+        this.container = document.querySelector(container);
+        this._goods = [];
+        this._productsObjects = [];
     }
-    // Добавление товара в корзину (привязываем на нажатие кнопки)
     addToBasket(id) {
         let toBasket;
         list.goods.forEach(function(item) {
