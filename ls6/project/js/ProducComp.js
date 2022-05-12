@@ -24,12 +24,19 @@ Vue.component('products', {
     },
     template: `
         <div class="products">
-            <product v-for="item of filtered" :key="item.id_product" :img="imgCatalog" :product="item"></product>
+            <p v-if="$root.$refs.search.searchText && !$root.$refs.search.filtered.length">
+            По вашему запросу ничего не найдено</p>
+            <product ref="refref" v-for="item of filtered" :key="item.id_product" :img="imgCatalog" :product="item"></product>
         </div>
     `
 });
 Vue.component('product', {
     props: ['product', 'img'],
+    data() {
+        return {
+            cartAPI: this.$root.$refs.cart, 
+        };
+    },
 
     template: `
     <div class="product-item">
@@ -38,7 +45,8 @@ Vue.component('product', {
                     <h3>{{product.product_name}}</h3>
                     <p>{{product.price}}₽</p>
                     <button class="buy-btn" @click="$root.$refs.cart.addProduct(product)">Купить</button>
-<!--                    <button class="buy-btn" @click="$parent.$parent.$refs.cart.addProduct(product)">Купить</button>-->
+<!-- 1                    <button class="buy-btn" @click="$parent.$parent.$refs.cart.addProduct(product)">Купить</button>-->
+<!-- 2                    <button class="buy-btn" @click="$parent.$parent.$refs.cart.addProduct(product)">Купить</button>-->
                 </div>
             </div>
     `
